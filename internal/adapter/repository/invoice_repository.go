@@ -15,21 +15,21 @@ func NewInvoiceRepository() repository.InvoiceRepository {
 }
 
 func (i *invoiceRepository) CreateInvoice(ctx context.Context, input *model.Invoice) (*model.Invoice, error) {
-	invoice := query.Q.Invoice
-	if err := invoice.WithContext(ctx).Create(input); err != nil {
-		return nil, fmt.Errorf("failed to create invoice: %w", err)
+	iq := query.Q.Invoice
+	if err := iq.WithContext(ctx).Create(input); err != nil {
+		return nil, fmt.Errorf("failed to create iq: %w", err)
 	}
-	output, err := invoice.WithContext(ctx).Where(invoice.ID.Eq(input.ID)).First()
+	output, err := iq.WithContext(ctx).Where(iq.ID.Eq(input.ID)).First()
 	if err != nil {
-		return nil, fmt.Errorf("failed to get created invoice: %w", err)
+		return nil, fmt.Errorf("failed to get created iq: %w", err)
 	}
 	return output, nil
 }
 
 func (i *invoiceRepository) ListInvoicesByDueDate(ctx context.Context, input *repository.ListInvoiceByDueDateInput) ([]*model.Invoice, error) {
-	invoice := query.Q.Invoice
+	iq := query.Q.Invoice
 	var output []*model.Invoice
-	if err := invoice.WithContext(ctx).Where(invoice.DueDate.Between(input.StartDate, input.EndDate), invoice.CompanyID.Eq(input.TenantID)).Scan(output); err != nil {
+	if err := iq.WithContext(ctx).Where(iq.DueDate.Between(input.StartDate, input.EndDate), iq.CompanyID.Eq(input.CompanyID)).Scan(output); err != nil {
 		return nil, fmt.Errorf("failed to get invoices: %w", err)
 	}
 	return output, nil

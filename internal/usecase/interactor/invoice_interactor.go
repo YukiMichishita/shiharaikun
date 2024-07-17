@@ -51,8 +51,12 @@ func (i *invoiceInterActor) CreateInvoice(ctx context.Context, input *model.Crea
 	if err != nil {
 		return nil, fmt.Errorf("failed to parse due date: %w", err)
 	}
+	user, ok := ctx.Value("user").(*domainmodel.User)
+	if !ok {
+		return nil, fmt.Errorf("failed to get user from context")
+	}
 	invoice := &domainmodel.Invoice{
-		CompanyID:      int32(input.TenantID),
+		CompanyID:      user.CompanyID,
 		ClientID:       int32(input.ClientID),
 		IssuedDate:     parsedIssuedDate,
 		AmountDue:      decimal.Decimal(amountDue),

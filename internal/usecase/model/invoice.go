@@ -15,7 +15,7 @@ type Invoice struct {
 }
 
 type CreateInvoiceRequest struct {
-	TenantID  int
+	UserID    int    `json:"userId"`
 	ClientID  int    `json:"clientId"`
 	IssueDate string `json:"issueDate"`
 	AmountDue int    `json:"amountDue"`
@@ -28,7 +28,6 @@ type CreateInvoiceResponse struct {
 }
 
 type GetInvoicesRequest struct {
-	TenantID  int
 	StartDate time.Time `uri:"startDate"`
 	EndDate   time.Time `uri:"endDate"`
 }

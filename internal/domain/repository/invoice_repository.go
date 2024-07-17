@@ -14,5 +14,5 @@ type InvoiceRepository interface {
 type ListInvoiceByDueDateInput struct {
 	StartDate time.Time
 	EndDate   time.Time
-	TenantID  int32
+	CompanyID int32
 }

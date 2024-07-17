@@ -7,7 +7,6 @@ import (
 	"net/http"
 	"shiharaikun/internal/usecase"
 	"shiharaikun/internal/usecase/model"
-	"strconv"
 	"time"
 )
 
@@ -34,13 +33,6 @@ func (i *InvoiceHandler) CreateInvoiceHandler(w http.ResponseWriter, r *http.Req
 		http.Error(w, "Unable to parse JSON", http.StatusBadRequest)
 		return
 	}
-	tenantID := r.Header.Get("x-Tenant-ID")
-	req.TenantID, err = strconv.Atoi(tenantID)
-	if err != nil {
-		log.Print(err)
-		http.Error(w, "Invalid tenant ID", http.StatusBadRequest)
-		return
-	}
 
 	ctx := r.Context()
 	resp, err := i.useCase.CreateInvoice(ctx, &req)
@@ -59,18 +51,9 @@ func (i *InvoiceHandler) CreateInvoiceHandler(w http.ResponseWriter, r *http.Req
 }
 
 func (i *InvoiceHandler) ListInvoicesByDueDateHandler(w http.ResponseWriter, r *http.Request) {
-	tenantID := r.Header.Get("x-Tenant-ID")
-	tenantIDInt, err := strconv.Atoi(tenantID)
-	if err != nil {
-		log.Print(err)
-		http.Error(w, "Invalid tenant ID", http.StatusBadRequest)
-		return
-	}
-
 	startDate := r.URL.Query().Get("start_date")
 	endDate := r.URL.Query().Get("end_date")
 	if startDate == "" || endDate == "" {
-		log.Print(err)
 		http.Error(w, "Invalid date range", http.StatusBadRequest)
 		return
 	}
@@ -89,7 +72,6 @@ func (i *InvoiceHandler) ListInvoicesByDueDateHandler(w http.ResponseWriter, r *
 	}
 	ctx := r.Context()
 	req := &model.GetInvoicesRequest{
-		TenantID:  tenantIDInt,
 		StartDate: sd,
 		EndDate:   ed,
 	}
