@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"gorm.io/driver/mysql"
 	"gorm.io/gen"
+	"gorm.io/gen/field"
 	"gorm.io/gorm"
 	"log"
 	"os"
@@ -35,7 +36,9 @@ func main() {
 		gen.FieldType("tax_rate", "decimal.Decimal"),
 		gen.FieldType("total_amount", "decimal.Decimal"),
 	)
-	g.ApplyBasic(invoice)
+	companies := g.GenerateModel("companies")
+	users := g.GenerateModel("users", gen.FieldRelate(field.HasOne, "Company", companies, &field.RelateConfig{}))
+	g.ApplyBasic(invoice, companies, users)
 	g.ApplyBasic(all...)
 
 	g.Execute()

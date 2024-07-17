@@ -12,6 +12,7 @@ run_mysql:
 	    -e MYSQL_DATABASE=$(MYSQL_DATABASE) \
 	    -e MYSQL_USER=$(MYSQL_USER) \
 	    -e MYSQL_PASSWORD=$(MYSQL_PASSWORD) \
+	    -e MYSQLD_OPTS="--default-authentication-plugin=mysql_native_password" \
 	    -p $(MYSQL_PORT):3306 \
 	    -d mysql:latest
 
@@ -29,3 +30,6 @@ stop_mysql:
 
 gorm_gen:
 	@cd ./cmd/gormgen && go run main.go
+
+run_serer:
+	@go run cmd/rest/main.go

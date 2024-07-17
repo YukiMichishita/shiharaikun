@@ -13,6 +13,7 @@ CREATE TABLE users (
     name VARCHAR(255) NOT NULL,
     email VARCHAR(255) NOT NULL UNIQUE,
     password VARCHAR(255) NOT NULL,
+    session_id VARCHAR(255) UNIQUE,
     FOREIGN KEY (company_id) REFERENCES companies(id)
 );
 
@@ -54,6 +55,8 @@ CREATE TABLE invoices (
     FOREIGN KEY (client_id) REFERENCES clients(id)
 );
 
-insert into companies (company_name, representative_name, phone_number, postal_code, address) values ("test_company", "shachou taro", null, null, null);
+insert into companies values (1, "test_company", "shachou taro", null, null, null);
 
-insert into clients values(62163349, 1, "test_client", "shachou jirou", null, null, null);
+insert into clients values(1, 1, "test_client", "shachou jirou", null, null, null);
+
+insert into users values (1, 1, "test user", "test@example.com", "test", "test");
